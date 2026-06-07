@@ -1,0 +1,46 @@
+public class Evaluation {
+
+    public static void main(String[] args){
+        String result = computeGameState("alex", "franck", new String[]{"alex","alex", "franck", "franck", "franck", "franck"});
+        System.out.println(result);
+    }
+
+    public static String computeGameState(String nameP1, String nameP2, String... wins){
+
+        if(wins.length==0)
+            return nameP1+" 0 - "+nameP2+" 0";
+
+        int occurP1 = 0, occurP2 = 0;
+        for (int i = 0; i < wins.length ; i++) {
+            if(wins[i].equals(nameP1))
+                occurP1 ++;
+            else if(wins[i].equals(nameP2))
+                occurP2++;
+        }
+
+        String winPotentiel = (occurP1 > occurP2) ? nameP1 : nameP2;
+
+        if(occurP1 == 3 && occurP2 == 3)
+            return  "DEUCE";
+
+        else if(occurP1 >= 3 && occurP2 >= 3 && (occurP1 == occurP2+1 || occurP2 == occurP1+1))
+            return winPotentiel+" ADVANTAGE";
+
+        else if( (occurP1 >=4 || occurP2 >= 4) && (occurP1 == occurP2+2 || occurP2 == occurP1+2))
+            return winPotentiel+" WINS";
+
+        else if(occurP1 == occurP2 && occurP1 <= 2)
+            return (occurP1 == 1) ? "15a" : "30a";
+
+        else
+            return calculPoints(nameP1, nameP2, occurP1, occurP2);
+    }
+
+    public static String calculPoints(String nameP1, String nameP2, int occurP1, int occurP2){
+        return nameP1+" "+getPoint(occurP1)+" - "+nameP2+" "+getPoint(occurP2);
+    }
+
+    public static int getPoint(int occur){
+        return (occur <= 2) ? occur*15 : 40;
+    }
+}
